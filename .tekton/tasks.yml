@@ -23,7 +23,7 @@ spec:
           #
           # We don't just "rm -rf ${WORKSPACE_SOURCE_PATH}" because ${WORKSPACE_SOURCE_PATH} might be "/"
           # or the root of a mounted volume.
-          if [ -d "${WORKSPACE_SOURCE_PATH}" ] : then
+          if [ -d "${WORKSPACE_SOURCE_PATH}" ] ; then
             # Delete non-hidden files and directories
             rm -rf "${WORKSPACE_SOURCE_PATH:?}"/*
             # Delete files and directories starting with . but excluding ..
@@ -48,14 +48,7 @@ spec:
     - name: nosetests
       image: python:3.9-slim
       workingDir: $(workspaces.source.path)
-      command:
-        - "bash"
-        - "-c"
-        - |
-          # Install nose testing framework
-          pip install nose
-          # Run nosetests with the provided arguments
-          nosetests $(params.args)
+      script: |
         #!/bin/bash
         set -e
         python -m pip install --upgrade pip wheel
